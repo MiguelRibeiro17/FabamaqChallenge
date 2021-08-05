@@ -1,8 +1,8 @@
 # FabamaqChallenge
 Fabamaq Challenge
 Options:
-1:CashIn: allows the player to cash in money onto the game. The user specifies the amount he wishes in $ and it charges the account with the corresponding credits.
-2:CashOut: aloows the player to withraw money from the game.The user specifies the amount he wishes in $ and it decreases the corresponding credits.
+- 1:CashIn: allows the player to cash in money onto the game. The user specifies the amount he wishes in $ and it charges the account with the corresponding credits.
+- 2:CashOut: aloows the player to withraw money from the game.The user specifies the amount he wishes in $ and it decreases the corresponding credits.
 3:ChangeBet: allows the player to change the bet ammount (in credits). This amount is used for both game modes (play and gamble).
 4:ChangeDenomination: Allows the player to change the denomination (AmountInCash = Denomination * AmountInCredits).
 5:Play: The player bets the bet specified in credits. 10% goes to the house. 50% chance of winning, if the player wins 80% chance of winning credits and 20% of winning points.
