@@ -6,7 +6,7 @@ void Parameters::updateValues()
 	this->calculateRTP(this->coinIn, this->coinOut);
 	std::ofstream FILE;
 	FILE.open("Parameters.txt", std::ofstream::out | std::ofstream::trunc);
-	FILE << credits << std::endl 
+	FILE<< credits << std::endl 
 		<< denomination << std::endl 
 		<< points << std::endl 
 		<< TCashIn << std::endl 
@@ -46,7 +46,7 @@ Parameters::Parameters()
 	this->TPlays1 = 0;
 	this->TPlays2 = 0;
 	this->RTP = 0;
-	this->Bet = 1;
+	this->Bet = 10;
 	this->BalanceInCash = 0;
 	this->readFile();
 }
@@ -144,7 +144,7 @@ void Parameters::readFile()
 
 void Parameters::displayValues()
 {
-	std::cout << "Your Statistics:"<< std::endl << "Credits : " << this->credits << " | " << "Denomination : " << this->denomination << " | " << "Points : " << this->points << " | " << "Bet Value : " << this->Bet << std::endl;
+	std::cout << "Your Statistics:"<< "\n" << std::endl << "Credits : " << this->credits << " | " << "Denomination : " << this->denomination << " | " << "Points : " << this->points << " | " << "Bet Value : " << this->Bet << std::endl;
 				
 }
 
@@ -190,7 +190,7 @@ void Parameters::setDenomination(float denomination)
 	else this->denomination = 0;
 }
 
-void Parameters::setPoints(int points)
+void Parameters::setPoints(float points)
 {
 	this->points = points;
 }
@@ -252,12 +252,12 @@ void Parameters::setBetBalanceInCash(int bet)
 	this->BalanceInCash = bet;
 }
 
-void Parameters::increaseCredits(int credits)
+void Parameters::increaseCredits(float credits)
 {	
 	this->setCredits(credits + this->credits);
 }
 
-void Parameters::decreaseCredits(int credits)
+void Parameters::decreaseCredits(float credits)
 {
 	this->setCredits(this->credits - credits);
 
@@ -339,7 +339,7 @@ float Parameters::getPoints()
 	return this->points;
 }
 
-void Parameters::decreasePoints(int points)
+void Parameters::decreasePoints(float points)
 {
 	this->setPoints(this->points - points);
 

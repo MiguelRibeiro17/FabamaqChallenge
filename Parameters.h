@@ -13,19 +13,16 @@ private:
 	
 public:
 	void writeCoinOnFile(std::deque <float> g, std::ofstream &file);
-
 	void updateValues();
 	void calculateRTP(std::deque <float> coinIn, std::deque <float> coinOut);
-
 	Parameters();
-
 	void readFile();
 	
 	void displayValues();
 	//sets
 	void setCredits(float credits);
 	void setDenomination (float denomination);
-	void setPoints(int points);
+	void setPoints(float points);
 	void increaseTCashIn(int TCashIn);
 	void setTCashOut(int TCashOut);
 	void setTCoinIn(int TCoinIn);
@@ -35,26 +32,23 @@ public:
 	void setRTP(int RTP);
 	void setBet(int Bet);
 	void setBetBalanceInCash(int bet);
+	//increases
 	void increaseTCoinIn(float CoinIn);
-
 	void increaseTCoinOut(float CoinOut);
 	float increaseBalanceInCash(float BalanceInCash);
 	float decreaseBalanceInCash(float BalanceInCash);
 	void increasePoints(float points);
-
-
-	void insertCoinIn(float value);
-
-	void insertCoinOut(float value);
-
-	void increaseCredits(int credits);
-	void decreaseCredits(int credits);	
+	void increaseCredits(float credits);
+	void decreaseCredits(float credits);
 	void increaseTPlays1(int value);
 	void increaseTPlays2(int value);
-	void decreasePoints(int points);
-
+	void decreasePoints(float points);
+	//inserts
+	void insertCoinIn(float value);
+	void insertCoinOut(float value);
+	//gets
 	float getDenomination();
-	int getCredits();
+	int   getCredits();
 	float getBalanceInCash();
 	float getBet();
 	float getPoints();

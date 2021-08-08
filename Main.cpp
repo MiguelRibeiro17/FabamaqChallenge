@@ -2,24 +2,31 @@
 #include "Parameters.h"
 #include <exception>
 #include <iomanip>
+#include <chrono>
+#include <thread>
+static std::string option;
+static time_t start;
+static Parameters parameters;
+static bool sair = false;
+
 void cashIn(Parameters& parameters)
 {
 	int cashIn;
-	std::cout << "How much cash do you wish to deposit?" << std::endl;
+	std::cout <<"\n"<< "How much cash do you wish to deposit?"<< "\n"<< std::endl;
 	std::cin >> cashIn;
 	float credits = cashIn/parameters.getDenomination();
 	parameters.increaseCredits(credits);
 	parameters.increaseTCashIn(cashIn);
 	float balance = parameters.increaseBalanceInCash(cashIn);
 	std::cout << "\n" << "You cashed in: " << cashIn << "$." <<" Considering your denomination of: "<< parameters.getDenomination()
-		<< " it corresponds to: " << credits << " credits." << "\n" << "Total Balance: "<< balance <<"%." << std::endl;
+		<< " it corresponds to: " << credits << " credits." << "\n"<<"\n" << "Total Balance: "<< balance <<"$."<<"\n" << std::endl;
 
 }
 
 void changeDenomination(Parameters& parameters)
 {
 	float denomination;
-	std::cout << "What value do you want to set the denomination to ?" << std::endl;
+	std::cout << "\n"<<"What value do you want to set the denomination to ?"<<"\n" << std::endl;
 	std::cin >> denomination;
 	parameters.setDenomination(denomination);
 	parameters.setCredits(parameters.getBalanceInCash()/parameters.getDenomination());
@@ -28,7 +35,7 @@ void changeDenomination(Parameters& parameters)
 void cashOut(Parameters& parameters)
 {
 	int cashOut;
-	std::cout << "How much cash do you wish to withraw?" << std::endl;
+	std::cout << "\n"<<"How much cash do you wish to withraw?"<< "\n" << std::endl;
 	std::cin >> cashOut;
 	if (cashOut <= parameters.getBalanceInCash())
 	{
@@ -37,30 +44,29 @@ void cashOut(Parameters& parameters)
 		parameters.setTCashOut(cashOut);
 		float balance = parameters.decreaseBalanceInCash(cashOut);
 		std::cout << "\n" << "You withdrew: " << cashOut << "$." << " Considering your denomination of: " << parameters.getDenomination()
-			<< " it corresponds to: " << credits << " credits." << "\n" << "Total Balance: " << balance << "%." << std::endl;
+			<< " it corresponds to: " << credits << " credits." << "\n" << "\n" << "Total Balance: " << balance << "$."<<"\n" << std::endl;
 
 	}
 	else
 	{
-		std::cout << "You do not have enough credits" << "\n" << std::endl;
+		std::cout << "\n"<<"You do not have enough credits" << "\n" << std::endl;
 	}
 }
 
 void changeBet(Parameters& parameters)
 {
 	int bet;
-	std::cout << "How much do you wish to bet?" << std::endl;
+	std::cout << "\n" <<"How much do you wish to bet?" <<"\n" << std::endl;
 	std::cin >> bet;
 	parameters.setBet(bet);
 }
 
-
-
 void play(Parameters& parameters)
-{
+{	
+	start = time(NULL);
 	if (parameters.getBet()*parameters.getDenomination()> (parameters.getBalanceInCash()))
 	{
-		std::cout << "You do not have enough credits" << "\n"  << std::endl;
+		std::cout <<"\n"<< "You do not have enough credits" << "\n"  << std::endl;
 	}
 	else
 	{
@@ -79,14 +85,14 @@ void play(Parameters& parameters)
 			flip2 = rand() % 5;
 			if (flip2 !=4)
 			{	
-				std::cout << "YOU WON "<< returnValue << " CREDITS!" << "\n" << std::endl;
+				std::cout << "\n" << "YOU WON "<< returnValue << " CREDITS!" << "\n" << std::endl;
 				parameters.increaseTCoinOut(returnValue*parameters.getDenomination());
 				parameters.increaseCredits(returnValue);
 				parameters.insertCoinOut(returnValue*parameters.getDenomination());
 			}
 			else
 			{
-				std::cout << "YOU WON " << returnValue << " POINTS!" << "\n" << std::endl;
+				std::cout <<"\n" <<"YOU WON " << returnValue << " POINTS!" << "\n" << std::endl;
 				parameters.increasePoints(returnValue);
 				parameters.insertCoinOut(0);
 			}
@@ -94,18 +100,19 @@ void play(Parameters& parameters)
 		}
 		else //lose
 		{
-			std::cout << "You lost "<< parameters.getBet()*0.9 << " credits" << "\n" << std::endl;
+			std::cout <<"\n"<< "You lost "<< parameters.getBet()*0.9 << " credits" << "\n" << std::endl;
 			parameters.insertCoinOut(0);
 
 		}
 	}
+	
 }
 
 void gamble(Parameters& parameters)
 {
 	if (parameters.getBet() > (parameters.getPoints()))
 	{
-		std::cout << "You do not have enough points" << "\n" << std::endl;
+		std::cout << "\n"<<"You do not have enough points" << "\n" << std::endl;
 	}
 	else
 	{
@@ -122,13 +129,13 @@ void gamble(Parameters& parameters)
 			flip2 = rand() % 5;
 			if (flip2 != 4)
 			{
-				std::cout << "YOU WON " << returnValue << " POINTS!" << "\n" << std::endl;
+				std::cout << "\n"<<"YOU WON " << returnValue << " POINTS!" << "\n" << std::endl;
 				parameters.increasePoints(returnValue);
 				parameters.insertCoinOut(0);
 			}
 			else
 			{
-				std::cout << "YOU WON " << returnValue << " POINTS!" << "\n" << std::endl;
+				std::cout << "\n"<<"YOU WON " << returnValue << " POINTS!" << "\n" << std::endl;
 
 				parameters.increaseTCoinOut(returnValue * parameters.getDenomination());
 				parameters.increaseCredits(returnValue);
@@ -145,40 +152,68 @@ void gamble(Parameters& parameters)
 	}
 }
 
-
-
 void displayOptions()
 {
-	std::cout << "Choose one of the following options:" << std::endl << "1 - Cash In" << std::endl << "2 - Cash Out"
+	std::cout <<"\n"<< "Choose one of the following options:"<<"\n" << std::endl << "1 - Cash In" << std::endl << "2 - Cash Out"
 		<< std::endl << "3 - Change Bet" << std::endl << "4 - Change Denomination" << std::endl
 		<< "5 - Play (Credits)" << std::endl << "6 - Gamble (Points)" << std::endl << "7 - Exit" << "\n" << std::endl;
 }
+
+void wait()
+{
+	time_t waitTime = 5;
+	while (!sair)
+
+	{	
+		if ((time(NULL) - start > waitTime) && option.empty())
+		{
+			if (parameters.getBet() * parameters.getDenomination() <= (parameters.getBalanceInCash()))
+			{
+				play(parameters);
+				parameters.displayValues();
+				displayOptions();
+			}
+			else
+			{
+				if (parameters.getBet() <= parameters.getPoints())
+				{
+					gamble(parameters);
+					parameters.displayValues();
+					displayOptions();
+				}
+			}
+			
+		}
+		std::this_thread::sleep_for(std::chrono::milliseconds(50));
+	}
+	
+	
+}
+
 void display()
 {
-	Parameters parameters;
-	std::string option;
-
-	while (option != "7")
+	
+	while (!sair)
 	{
-		try
-		{
 			parameters.displayValues();
 			std::cout << std::endl;
 			displayOptions();
+			option = "";
+			
 			std::cin >> option;
+
 			if (option.length() > 1)
 			{
-				std::cout << "Please type in a number from 1 to 7 and press ENTER" << "\n" << std::endl;
+				std::cout << "\n" << "Please type in a number from 1 to 7 and press ENTER" << "\n" << std::endl;
 
 			}
 			else
 			{
-				int option2 = std::atoi(option.c_str());
+				int optionInt = std::atoi(option.c_str());
 
-				switch (option2)
+				switch (optionInt)
 				{
 				case 1: cashIn(parameters);
-
 					break;
 
 				case 2: cashOut(parameters);
@@ -200,30 +235,33 @@ void display()
 				{
 					parameters.updateValues();
 					std::cout << std::endl;
-					std::cout << "Thank you for playing with us :)" << "\n" << std::endl;
+					std::cout << "\n" << "Thank you for playing with us :)" << "\n" << std::endl;
+					sair = true;
 					break;
 				}
 				default:
-					std::cout << "Please type in a number from 1 to 7 and press ENTER" << "\n" << std::endl;
-
+					std::cout << "\n" << "Please type in a number from 1 to 7 and press ENTER" << "\n" << std::endl;
 					break;
 
 				}
+
+
 			}
-		}
-		catch (std::exception& e)
-		{
-			std::cout << "exception thrown" << e.what() << std::endl;
+			
+			std::this_thread::sleep_for(std::chrono::milliseconds(50));
+			start = time(NULL);
+			option = "";
 
-		}
 	}
+	
 }
-
 
 int main()
 {
-	display();
+	start = time(NULL);
+	std::thread diisplay(display);
+	std::thread waiting(wait);
+	diisplay.join();
+	waiting.join();
 	return 0;
-
 }
-
